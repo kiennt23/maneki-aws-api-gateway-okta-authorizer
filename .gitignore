@@ -1,6 +1,7 @@
 # Enforce typescript
 *.js
 *.zip
+.env.local
 # Created by https://www.gitignore.io/api/osx,node,linux,windows
 
 ### Linux ###
