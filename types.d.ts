@@ -73,5 +73,5 @@ type Policy = {
   principalId: string;
   policyDocument: PolicyDocument;
   usageIdentifierKey?: string;
-  context?: { [P: string]: string | number | boolean };
+  context?: { [P: string]: string | number | boolean | { [P: string]: string | number | boolean } };
 };

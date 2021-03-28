@@ -2,7 +2,7 @@
   "name": "okta-verifier",
   "version": "1.0.0",
   "scripts": {
-    "start": "tsc types.d.ts index.ts"
+    "build": "tsc types.d.ts index.ts"
   },
   "dependencies": {
     "@okta/jwt-verifier": "^2.0.1"

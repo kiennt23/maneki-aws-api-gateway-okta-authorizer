@@ -104,7 +104,7 @@ class AuthPolicy {
     return statements;
   }
 
-  build(): Policy {
+  build(claims?: any): Policy {
     if (
       (!this.allowMethods || this.allowMethods.length == 0) &&
       (!this.denyMethods || this.denyMethods.length == 0)
@@ -122,6 +122,9 @@ class AuthPolicy {
       },
       context: {
         principalId: this.principalId,
+        claims: {
+          sub: claims && claims.sub ? claims.sub : {},
+        },
       },
     };
   }
@@ -142,17 +145,15 @@ export const handler = async (event: any = {}, context: any = {}): Promise<any> 
     stage: apiGatewayArnTmp[1],
   };
   try {
-    const {
-      claims: { sub },
-    } = await jwtVerifier.verifyAccessToken(token, process.env.OKTA_AUDIENCE);
+    const { claims } = await jwtVerifier.verifyAccessToken(token, process.env.OKTA_AUDIENCE);
     // const method = apiGatewayArnTmp[2];
     // let resource = "/";
     // if (apiGatewayArnTmp[3]) {
     //   resource += apiGatewayArnTmp.slice(3, apiGatewayArnTmp.length).join("/");
     // }
-    const authPolicy = new AuthPolicy(sub, awsAccountId, apiOptions);
+    const authPolicy = new AuthPolicy(claims.sub, awsAccountId, apiOptions);
     authPolicy.allowAllMethods();
-    return authPolicy.build();
+    return authPolicy.build(claims);
   } catch (err) {
     const authPolicy = new AuthPolicy(null, null, apiOptions);
     authPolicy.denyAllMethods();
